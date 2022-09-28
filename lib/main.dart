@@ -1,55 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
-import 'package:xenon/pages/connect.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'app.dart';
+
+void main() async {
+  runApp(const App());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Cloud Gallery',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+          fontFamily: "Inter",
+          scrollbarTheme: ScrollbarThemeData(
+            thumbColor: MaterialStateProperty.all(
+              const Color(0xff777777),
+            ),
+          )),
+      home: const MainApp(),
     );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  List<ScanResult> scans = [];
-
-  Column listDevices() {
-    List<Widget> show = [];
-    for (ScanResult result in scans) {
-      show.add(Text(
-        result.device.name,
-        style: const TextStyle(color: Colors.black),
-      ));
-    }
-    return Column(children: show);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: const ConnectPage());
   }
 }

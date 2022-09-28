@@ -76,18 +76,27 @@ class _ConnectPageState extends State<ConnectPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          listDevices(),
-          TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-            ),
-            onPressed: refreshDevices,
-            child: Text('Refresh devices'),
+    return Material(
+      child: Container(
+        padding: EdgeInsets.only(top: 100),
+        child: Center(
+          child: Column(
+            children: [
+              listDevices(),
+              TextButton(
+                style: ButtonStyle(
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(Colors.blue),
+                ),
+                onPressed: refreshDevices,
+                child: const Text(
+                  'Refresh devices',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
