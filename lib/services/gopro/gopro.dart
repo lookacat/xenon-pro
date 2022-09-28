@@ -1,4 +1,5 @@
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:xenon/services/gopro/settings.dart';
 
 import '../../logger.dart';
 import 'constants.dart';
@@ -35,7 +36,7 @@ class GoproService {
     await queryResponse.setNotifyValue(true);
     queryResponse.value.listen((value) {
       //Logger.log("[GoPro][Query-Response] $value", Logger.cyan);
-      QueryResponsePackage response = QueryResponsePackage();
+      QueryResponse response = QueryResponse();
       response.parse(value);
     });
   }
@@ -58,10 +59,18 @@ class GoproService {
     }
   }
 
-  Future<void> sendQuery(Query query) async {
+  Future<void> sendQuery(QueryRequest query) async {
     var characteristic = _getCharacteristics(Constants.QueryRequestServiceId);
     if (characteristic != null) {
       await characteristic.write(query.toQuery());
+    }
+  }
+
+  Future<void> sendSettings(SettingsRequest setting) async {
+    var characteristic =
+        _getCharacteristics(Constants.SettingsRequestServiceId);
+    if (characteristic != null) {
+      await characteristic.write(setting.toQuery());
     }
   }
 

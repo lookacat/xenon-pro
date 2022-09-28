@@ -8,6 +8,7 @@ import '../services/gopro/commands.dart';
 import '../services/gopro/constants.dart';
 import '../services/gopro/gopro.dart';
 import '../services/gopro/query.dart';
+import '../services/gopro/settings.dart';
 
 class ConnectPage extends StatefulWidget {
   const ConnectPage({Key? key}) : super(key: key);
@@ -45,11 +46,17 @@ class _ConnectPageState extends State<ConnectPage> {
   void connectToDevice(BluetoothDevice device) async {
     var service = GoproService();
     await service.connect(device);
-    /*sleep(new Duration(seconds: 3));
-    await service.sendCommand(GoproCommands.SwitchToVideoMode);*/
-    sleep(const Duration(seconds: 3));
-    Query requestAll = Query.fromList([Setting.Resolution, Setting.FPS]);
+
+    sleep(const Duration(seconds: 1));
+    QueryRequest requestAll =
+        QueryRequest.fromList([Setting.Resolution, Setting.FPS]);
+
     await service.sendQuery(requestAll);
+    SettingsRequest settings =
+        SettingsRequest(Setting.Resolution, Resolution.r_53K_43);
+    await service.sendSettings(settings);
+    SettingsRequest settings2 = SettingsRequest(Setting.FPS, FPS.fps_24);
+    await service.sendSettings(settings2);
   }
 
   Widget listDevices() {

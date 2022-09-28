@@ -1,27 +1,28 @@
 import '../../logger.dart';
 import 'constants.dart';
+import 'packet.dart';
 
-class Query {
+class QueryRequest implements RequestPacket {
   List<Setting> requestSettings = [];
 
-  Query();
-  Query.fromList(List<Setting> settings) : requestSettings = settings;
+  QueryRequest();
+  QueryRequest.fromList(List<Setting> settings) : requestSettings = settings;
 
   void addSetting(Setting setting) {
     requestSettings.add(setting);
   }
 
+  @override
   List<int> toQuery() {
     var query = [3, 18];
     for (var setting in requestSettings) {
       query.add(Constants.SettingsMapReverse[setting]!);
     }
-    Logger.log(query.toString(), Logger.red);
     return query;
   }
 }
 
-class QueryResponsePackage {
+class QueryResponse {
   int? size;
   int? queryId;
   bool? success;

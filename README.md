@@ -1,16 +1,32 @@
-# xenon
+# Project Xenon [experimental]
 
-A new Flutter project.
+Work in progress.
+
+## Install flutter
+
+MacOS:
+
+1. Download latest https://docs.flutter.dev/get-started/install/macos
+2. Unzip to /Users/{you}/flutter
+3. nano .bash_profile or .zshrc
+4. ```
+   export PATH=$HOME/flutter/bin:$PATH
+   ```
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+```bash
+flutter pub get
+flutter run
+```
 
-A few resources to get you started if this is your first Flutter project:
+## Use on Desktop
+```bash
+flutter config --enable-macos-desktop
+```
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Rebuild stores
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+flutter pub run build_runner build --delete-conflicting-outputs
+```
