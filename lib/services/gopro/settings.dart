@@ -1,5 +1,9 @@
+// ignore_for_file: constant_identifier_names
+
 import 'constants.dart';
 import 'packet.dart';
+
+enum Setting { Resolution, FPS }
 
 class SettingsRequest implements RequestPacket {
   Setting setting;

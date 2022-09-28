@@ -1,6 +1,7 @@
 import '../../logger.dart';
 import 'constants.dart';
 import 'packet.dart';
+import 'settings.dart';
 
 class QueryRequest implements RequestPacket {
   List<Setting> requestSettings = [];

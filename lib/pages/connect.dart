@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
 import '../logger.dart';
-import '../services/gopro/commands.dart';
 import '../services/gopro/constants.dart';
 import '../services/gopro/gopro.dart';
 import '../services/gopro/query.dart';
