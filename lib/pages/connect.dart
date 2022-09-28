@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+
+import '../logger.dart';
+import '../services/gopro/commands.dart';
+import '../services/gopro/gopro.dart';
 
 class ConnectPage extends StatefulWidget {
   const ConnectPage({Key? key}) : super(key: key);
@@ -17,10 +22,13 @@ class _ConnectPageState extends State<ConnectPage> {
   void refreshDevices() {
     FlutterBlue flutterBlue = FlutterBlue.instance;
     flutterBlue.startScan(timeout: const Duration(seconds: 4));
-
+    List<DeviceIdentifier> loggedIds = [];
     flutterBlue.scanResults.listen((results) {
       for (ScanResult r in results) {
-        print('${r.device.name} found! rssi: ${r.rssi}');
+        if (r.device.name == '') continue;
+        if (loggedIds.contains(r.device.id)) continue;
+        Logger.log('[BLE Search] ${r.device.name} found!', Logger.green);
+        loggedIds.add(r.device.id);
       }
       setState(() {
         foundDevices = results;
@@ -32,41 +40,14 @@ class _ConnectPageState extends State<ConnectPage> {
   }
 
   void connectToDevice(BluetoothDevice device) async {
-    await device.connect();
-    const GOPRO_BASE_UUID = "b5f9{}-aa8d-11e3-9046-0002a5d5c51b";
-    /*const SETTINGS_REQ_UUID = GOPRO_BASE_UUID.format("0074");
-    const SETTINGS_RSP_UUID = GOPRO_BASE_UUID.format("0075")*/
-    const test = "b5f90075-aa8d-11e3-9046-0002a5d5c51b";
-    // Reads all descriptors
-    List<BluetoothService> services = await device.discoverServices();
-    services.forEach((service) async {
-      var characteristics = service.characteristics;
-      for (var c in characteristics) {
-        /*await c.setNotifyValue(true);
-        c.value.listen((value) {
-          print("NEWVALUE:" + value.toString());
-        });
-        try {
-          c.write([33]);
-        } catch (ex) {}*/
-        "b5f90072-aa8d-11e3-9046-0002a5d5c51b";
-        if (c.uuid == Guid("b5f90072-aa8d-11e3-9046-0002a5d5c51b")) {
-          //03:01:01:00
-          //await c.write([1, 5]);
-          //power off
-          //04:3E:02:03:E9
-          //switch to photo
-          await c.write([0x04, 0x3e, 0x02, 0x03, 0xe9]);
-          print("FOUND WRITE!!!!!!!!!!!!!!!!!");
-        }
-      }
-    });
-    //device.services.length()
-
-    // Writes to a descriptor
-    //await d.write([0x12, 0x34])
-    //await client.write_gatt_char(SETTINGS_REQ_UUID, bytearray([0x03, 0x02, 0x01, 0x09]), response=True)
-    //await event.wait()
+    var service = GoproService();
+    await service.connect(device);
+    sleep(new Duration(seconds: 3));
+    await service.sendCommand(GoproCommands.SwitchToVideoMode);
+    sleep(new Duration(seconds: 3));
+    await service.sendCommand(GoproCommands.SwitchToPhotoMode);
+    sleep(new Duration(seconds: 3));
+    await service.sendCommand(GoproCommands.SwitchToVideoTimelapse);
   }
 
   Widget listDevices() {
