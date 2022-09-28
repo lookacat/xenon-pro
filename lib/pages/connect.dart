@@ -5,7 +5,9 @@ import 'package:flutter_blue/flutter_blue.dart';
 
 import '../logger.dart';
 import '../services/gopro/commands.dart';
+import '../services/gopro/constants.dart';
 import '../services/gopro/gopro.dart';
+import '../services/gopro/query.dart';
 
 class ConnectPage extends StatefulWidget {
   const ConnectPage({Key? key}) : super(key: key);
@@ -21,6 +23,7 @@ class _ConnectPageState extends State<ConnectPage> {
 
   void refreshDevices() {
     FlutterBlue flutterBlue = FlutterBlue.instance;
+    FlutterBlue.instance.setLogLevel(LogLevel.critical);
     flutterBlue.startScan(timeout: const Duration(seconds: 4));
     List<DeviceIdentifier> loggedIds = [];
     flutterBlue.scanResults.listen((results) {
@@ -42,12 +45,11 @@ class _ConnectPageState extends State<ConnectPage> {
   void connectToDevice(BluetoothDevice device) async {
     var service = GoproService();
     await service.connect(device);
-    sleep(new Duration(seconds: 3));
-    await service.sendCommand(GoproCommands.SwitchToVideoMode);
-    sleep(new Duration(seconds: 3));
-    await service.sendCommand(GoproCommands.SwitchToPhotoMode);
-    sleep(new Duration(seconds: 3));
-    await service.sendCommand(GoproCommands.SwitchToVideoTimelapse);
+    /*sleep(new Duration(seconds: 3));
+    await service.sendCommand(GoproCommands.SwitchToVideoMode);*/
+    sleep(const Duration(seconds: 3));
+    Query requestAll = Query.fromList([Setting.Resolution, Setting.FPS]);
+    await service.sendQuery(requestAll);
   }
 
   Widget listDevices() {
