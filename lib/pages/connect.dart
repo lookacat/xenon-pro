@@ -42,13 +42,23 @@ class _ConnectPageState extends State<ConnectPage> {
     services.forEach((service) async {
       var characteristics = service.characteristics;
       for (var c in characteristics) {
-        await c.setNotifyValue(true);
+        /*await c.setNotifyValue(true);
         c.value.listen((value) {
           print("NEWVALUE:" + value.toString());
         });
         try {
           c.write([33]);
-        } catch (ex) {}
+        } catch (ex) {}*/
+        "b5f90072-aa8d-11e3-9046-0002a5d5c51b";
+        if (c.uuid == Guid("b5f90072-aa8d-11e3-9046-0002a5d5c51b")) {
+          //03:01:01:00
+          //await c.write([1, 5]);
+          //power off
+          //04:3E:02:03:E9
+          //switch to photo
+          await c.write([0x04, 0x3e, 0x02, 0x03, 0xe9]);
+          print("FOUND WRITE!!!!!!!!!!!!!!!!!");
+        }
       }
     });
     //device.services.length()
