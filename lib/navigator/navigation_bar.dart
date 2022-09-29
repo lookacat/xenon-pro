@@ -1,9 +1,12 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:ionicons/ionicons.dart';
 
+import '../components/connection_status.dart';
 import '../models/navigation_bar_item.dart';
+import '../store/gopro/connector_store.dart';
 import 'navigation_bar_item.dart';
 
 class MainNavigationBar extends StatefulWidget {
@@ -33,7 +36,7 @@ class _NavigationBarState extends State<MainNavigationBar> {
           color: Colors.black.withOpacity(0.3),
           spreadRadius: 4,
           blurRadius: 18,
-          offset: const Offset(0, 0), // changes position of shadow
+          offset: const Offset(0, 0),
         ),
       ],
     );
@@ -71,12 +74,19 @@ class _NavigationBarState extends State<MainNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 70 + MediaQuery.of(context).padding.bottom,
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-      decoration: buildContainerDecoration(),
-      child: buildItemRow(),
-    );
+    return Column(children: [
+      Observer(
+        builder: (context) => ConnectionStatus(
+          connected: ConnectorStore.store.isConnected,
+        ),
+      ),
+      Container(
+        height: 70 + MediaQuery.of(context).padding.bottom,
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+        decoration: buildContainerDecoration(),
+        child: buildItemRow(),
+      )
+    ]);
   }
 }

@@ -25,6 +25,22 @@ mixin _$ConnectorStoreA on ConnectorStoreBase, Store {
     });
   }
 
+  late final _$isConnectedAtom =
+      Atom(name: 'ConnectorStoreBase.isConnected', context: context);
+
+  @override
+  bool get isConnected {
+    _$isConnectedAtom.reportRead();
+    return super.isConnected;
+  }
+
+  @override
+  set isConnected(bool value) {
+    _$isConnectedAtom.reportWrite(value, super.isConnected, () {
+      super.isConnected = value;
+    });
+  }
+
   late final _$scanResultsAtom =
       Atom(name: 'ConnectorStoreBase.scanResults', context: context);
 
@@ -56,6 +72,28 @@ mixin _$ConnectorStoreA on ConnectorStoreBase, Store {
   }
 
   @override
+  void setConnectedStatus(bool status) {
+    final _$actionInfo = _$ConnectorStoreBaseActionController.startAction(
+        name: 'ConnectorStoreBase.setConnectedStatus');
+    try {
+      return super.setConnectedStatus(status);
+    } finally {
+      _$ConnectorStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setLastGoproId(String id) {
+    final _$actionInfo = _$ConnectorStoreBaseActionController.startAction(
+        name: 'ConnectorStoreBase.setLastGoproId');
+    try {
+      return super.setLastGoproId(id);
+    } finally {
+      _$ConnectorStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setLastGopro(BluetoothDevice device) {
     final _$actionInfo = _$ConnectorStoreBaseActionController.startAction(
         name: 'ConnectorStoreBase.setLastGopro');
@@ -70,6 +108,7 @@ mixin _$ConnectorStoreA on ConnectorStoreBase, Store {
   String toString() {
     return '''
 lastGoproId: ${lastGoproId},
+isConnected: ${isConnected},
 scanResults: ${scanResults}
     ''';
   }

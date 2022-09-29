@@ -30,6 +30,7 @@ class GoproConnector {
 
   static Future<void> startScanning({manualScan = false}) async {
     await bluetoothService!.stopScan();
+    ConnectorStore.store.setConnectedStatus(false);
     bluetoothService!.startScan(allowDuplicates: false);
 
     bluetoothService!.scanResults.listen((results) async {
@@ -65,6 +66,7 @@ class GoproConnector {
       startScanning();
       return;
     }
+    ConnectorStore.store.setConnectedStatus(true);
     Logger.log("Connected to ${device.name}", Logger.yellow);
     ServicesStore.store.setGoproService(service);
     await saveLastGoproId(device);

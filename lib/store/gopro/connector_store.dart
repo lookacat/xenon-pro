@@ -10,12 +10,20 @@ abstract class ConnectorStoreBase with Store {
   String? lastGoproId;
 
   @observable
+  bool isConnected = false;
+
+  @observable
   ObservableList<ScanResult> scanResults = ObservableList<ScanResult>();
 
   @action
   void setScanResults(List<ScanResult> results) {
     scanResults.clear();
     scanResults.addAll(results);
+  }
+
+  @action
+  void setConnectedStatus(bool status) {
+    isConnected = status;
   }
 
   @action

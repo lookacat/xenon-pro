@@ -1,3 +1,7 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
+import 'dart:async';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:xenon/services/gopro/settings.dart';
@@ -11,7 +15,6 @@ import 'query.dart';
 class GoproService {
   BluetoothDevice? _device;
   List<BluetoothService>? _services;
-  bool isConnected = false;
 
   Future<void> connect(BluetoothDevice device) async {
     if (_device != null) {
@@ -23,12 +26,9 @@ class GoproService {
   }
 
   Future<void> _initAfterConnect() async {
-    isConnected = true;
-
     var listener;
     listener = _device!.state.listen((state) async {
       if (state == BluetoothDeviceState.disconnected) {
-        isConnected = false;
         await GoproConnector.startScanning();
         listener.cancel();
       }
@@ -71,7 +71,6 @@ class GoproService {
   }
 
   Future<void> sendCommand(List<int> command) async {
-    if (!isConnected) return;
     var characteristic = _getCharacteristics(Constants.CommandRequestServiceId);
     if (characteristic != null) {
       try {
@@ -88,7 +87,6 @@ class GoproService {
   }
 
   Future<void> sendQuery(QueryRequest query) async {
-    if (!isConnected) return;
     var characteristic = _getCharacteristics(Constants.QueryRequestServiceId);
     if (characteristic != null) {
       try {
@@ -105,7 +103,6 @@ class GoproService {
   }
 
   Future<void> sendSettings(SettingsRequest setting) async {
-    if (!isConnected) return;
     var characteristic =
         _getCharacteristics(Constants.SettingsRequestServiceId);
     if (characteristic != null) {
@@ -128,7 +125,6 @@ class GoproService {
   }
 
   Future<dynamic> disconnect() async {
-    if (!isConnected) return;
     return await _device?.disconnect();
   }
 }
