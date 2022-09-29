@@ -1,15 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-
-import '../logger.dart';
-import '../services/gopro/constants.dart';
-import '../services/gopro/gopro.dart';
-import '../services/gopro/query.dart';
-import '../services/gopro/settings.dart';
-import '../store/gopro/settings_store.dart';
-import '../store/services_store.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import '../services/gopro/connector.dart';
+import '../store/gopro/connector_store.dart';
 
 class ConnectPage extends StatefulWidget {
   const ConnectPage({Key? key}) : super(key: key);
@@ -21,61 +14,22 @@ class ConnectPage extends StatefulWidget {
 }
 
 class _ConnectPageState extends State<ConnectPage> {
-  List<ScanResult> foundDevices = [];
-
-  void refreshDevices() {
-    FlutterBlue flutterBlue = FlutterBlue.instance;
-    FlutterBlue.instance.setLogLevel(LogLevel.critical);
-    flutterBlue.startScan(timeout: const Duration(seconds: 4));
-    List<DeviceIdentifier> loggedIds = [];
-    flutterBlue.scanResults.listen((results) {
-      for (ScanResult r in results) {
-        if (r.device.name == '') continue;
-        if (loggedIds.contains(r.device.id)) continue;
-        Logger.log('[BLE Search] ${r.device.name} found!', Logger.green);
-        loggedIds.add(r.device.id);
-      }
-      setState(() {
-        foundDevices = results;
-      });
-    });
-
-    flutterBlue.stopScan();
-  }
-
-  void connectToDevice(BluetoothDevice device) async {
-    var service = GoproService();
-    await service.connect(device);
-
-    ServicesStore.store.setGoproService(service);
-
-    sleep(const Duration(seconds: 3));
-    QueryRequest requestAll =
-        QueryRequest.fromList([Setting.Resolution, Setting.FPS]);
-
-    await service.sendQuery(requestAll);
-    sleep(const Duration(seconds: 3));
-    SettingsRequest settings =
-        SettingsRequest(Setting.Resolution, Resolution.r_53K_43);
-    await service.sendSettings(settings);
-    SettingsRequest settings2 = SettingsRequest(Setting.FPS, FPS.fps_24);
-    await service.sendSettings(settings2);
-  }
-
   Widget listDevices() {
-    List<Widget> show = [];
-    for (ScanResult result in foundDevices) {
-      if (result.device.name == '') continue;
-      var button = TextButton(
-        style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-        ),
-        onPressed: () => connectToDevice(result.device),
-        child: Text(result.device.name),
-      );
-      show.add(button);
-    }
-    return Column(children: show);
+    return Observer(
+      builder: (_) => ListView.builder(
+        itemCount: ConnectorStore.store.scanResults.length,
+        itemBuilder: (context, index) {
+          var item = ConnectorStore.store.scanResults[index];
+          return TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+            ),
+            onPressed: () => GoproConnector.connectToDevice(item.device),
+            child: Observer(builder: (_) => Text(item.device.name)),
+          );
+        },
+      ),
+    );
   }
 
   @override
@@ -86,24 +40,15 @@ class _ConnectPageState extends State<ConnectPage> {
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Container(
-            padding: EdgeInsets.only(top: 100),
-            child: Center(
-              child: Column(
-                children: [
-                  listDevices(),
-                  TextButton(
-                    style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blue),
-                    ),
-                    onPressed: refreshDevices,
-                    child: const Text(
-                      'Refresh devices',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ),
-                ],
-              ),
+            height: 1600,
+            width: 100,
+            padding: const EdgeInsets.only(top: 100),
+            child: Column(
+              children: [
+                Expanded(
+                  child: listDevices(),
+                ),
+              ],
             ),
           ),
         ),

@@ -1,6 +1,11 @@
+import 'package:localstorage/localstorage.dart';
+import 'package:toast/toast.dart';
+
 import '../navigator/navigator.dart';
 import './navigator/navigation_bar.dart';
 import 'package:flutter/material.dart';
+
+import 'services/gopro/connector.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({Key? key}) : super(key: key);
@@ -13,6 +18,7 @@ class _MainAppPageState extends State<MainApp> {
   @override
   void initState() {
     super.initState();
+    GoproConnector.init();
   }
 
   @override

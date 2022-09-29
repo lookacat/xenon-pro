@@ -17,6 +17,8 @@ dependencies:
   page_transition: ^2.0.5
   flutter_mobx: ^2.0.6+4
   ionicons: ^0.1.2
+  localstorage: ^4.0.0+1
+  toast: ^0.2.2
 
 dev_dependencies:
   flutter_test:

@@ -22,7 +22,7 @@ class _NavigationBarItemState extends State<NavigationBarItem> {
     super.initState();
   }
 
-  void onItemTap() {
+  void onItemTap(BuildContext context) {
     HapticFeedback.heavyImpact();
     NavigatorStore.store.changeRoute(widget.model.target);
   }
@@ -57,14 +57,14 @@ class _NavigationBarItemState extends State<NavigationBarItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onItemTap,
+      onTap: () => onItemTap(context),
       child: Container(
         width: 90,
         decoration: const BoxDecoration(
           color: Colors.transparent,
         ),
         child: Observer(
-          builder: (context) => Column(
+          builder: (_) => Column(
             children: <Widget>[
               buildIcon(),
               Container(
