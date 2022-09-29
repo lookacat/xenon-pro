@@ -8,6 +8,8 @@ import '../services/gopro/constants.dart';
 import '../services/gopro/gopro.dart';
 import '../services/gopro/query.dart';
 import '../services/gopro/settings.dart';
+import '../store/gopro/settings_store.dart';
+import '../store/services_store.dart';
 
 class ConnectPage extends StatefulWidget {
   const ConnectPage({Key? key}) : super(key: key);
@@ -45,11 +47,14 @@ class _ConnectPageState extends State<ConnectPage> {
     var service = GoproService();
     await service.connect(device);
 
-    sleep(const Duration(seconds: 1));
+    ServicesStore.store.setGoproService(service);
+
+    sleep(const Duration(seconds: 3));
     QueryRequest requestAll =
         QueryRequest.fromList([Setting.Resolution, Setting.FPS]);
 
     await service.sendQuery(requestAll);
+    sleep(const Duration(seconds: 3));
     SettingsRequest settings =
         SettingsRequest(Setting.Resolution, Resolution.r_53K_43);
     await service.sendSettings(settings);

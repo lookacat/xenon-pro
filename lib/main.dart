@@ -13,7 +13,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Cloud Gallery',
+      title: 'Xenon',
       theme: ThemeData(
           fontFamily: "Inter",
           scrollbarTheme: ScrollbarThemeData(

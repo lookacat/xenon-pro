@@ -35,7 +35,7 @@ class _NavigationBarItemState extends State<NavigationBarItem> {
       child: Icon(
         widget.model.icon,
         color: widget.model.target == NavigatorStore.store.route
-            ? Color.fromARGB(255, 185, 213, 248)
+            ? Color.fromARGB(255, 248, 185, 185)
             : Color(0xff696969),
         size: 25,
       ),
@@ -80,12 +80,12 @@ class _NavigationBarItemState extends State<NavigationBarItem> {
                           begin: Alignment.topRight,
                           end: Alignment.bottomLeft,
                           colors: [
-                            Color(0xFF0869de),
-                            Color(0xFF4e85c8),
+                            Color.fromARGB(255, 240, 106, 22),
+                            Color.fromARGB(255, 249, 35, 35),
                           ],
                         ),
                       )
-                    : BoxDecoration(),
+                    : const BoxDecoration(),
                 child: buildLabel(),
               ),
             ],

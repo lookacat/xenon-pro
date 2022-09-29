@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:xenon/services/gopro/settings.dart';
 
@@ -9,6 +10,7 @@ import 'query.dart';
 class GoproService {
   BluetoothDevice? _device;
   List<BluetoothService>? _services;
+  bool isConnected = false;
 
   Future<void> connect(BluetoothDevice device) async {
     if (_device != null) {
@@ -20,6 +22,13 @@ class GoproService {
   }
 
   Future<void> _initAfterConnect() async {
+    isConnected = true;
+    _device!.state.listen((state) {
+      if (state == BluetoothDeviceState.disconnected) {
+        isConnected = false;
+      }
+      Logger.log("Device Status changed: ${state}", Logger.green);
+    });
     _services = await _device?.discoverServices();
     var commandResponse =
         _getCharacteristics(Constants.CommandResponseServiceId)!;
@@ -36,7 +45,6 @@ class GoproService {
     var queryResponse = _getCharacteristics(Constants.QueryResponseServiceId)!;
     await queryResponse.setNotifyValue(true);
     queryResponse.value.listen((value) {
-      //Logger.log("[GoPro][Query-Response] $value", Logger.cyan);
       QueryResponse response = QueryResponse();
       response.parse(value);
       for (var setting in response.values.keys) {
@@ -58,28 +66,64 @@ class GoproService {
   }
 
   Future<void> sendCommand(List<int> command) async {
+    if (!isConnected) return;
     var characteristic = _getCharacteristics(Constants.CommandRequestServiceId);
     if (characteristic != null) {
-      await characteristic.write(command);
+      try {
+        await characteristic.write(command);
+      } on PlatformException catch (exception) {
+        Logger.log(
+            "[GoPro][Service] ${exception.code} Device not connected trying to send command! ${exception.details}",
+            Logger.red);
+      } catch (exception) {
+        Logger.log(
+            "[GoPro][Service] Uncaught exception sending command", Logger.red);
+      }
     }
   }
 
   Future<void> sendQuery(QueryRequest query) async {
+    if (!isConnected) return;
     var characteristic = _getCharacteristics(Constants.QueryRequestServiceId);
     if (characteristic != null) {
-      await characteristic.write(query.toQuery());
+      try {
+        await characteristic.write(query.toQuery());
+      } on PlatformException catch (exception) {
+        Logger.log(
+            "[GoPro][Service] ${exception.code} Device not connected trying to send query! ${exception.details}",
+            Logger.red);
+      } catch (exception) {
+        Logger.log(
+            "[GoPro][Service] Uncaught exception sending query", Logger.red);
+      }
     }
   }
 
   Future<void> sendSettings(SettingsRequest setting) async {
+    if (!isConnected) return;
     var characteristic =
         _getCharacteristics(Constants.SettingsRequestServiceId);
     if (characteristic != null) {
-      await characteristic.write(setting.toQuery());
+      try {
+        await characteristic.write(setting.toQuery());
+      } on PlatformException catch (exception) {
+        Logger.log(
+            "[GoPro][ServiceException] ${exception.code} Device not connected trying to send settings! ${exception.details}",
+            Logger.red);
+      } catch (exception) {
+        Logger.log(
+            "[GoPro][ServiceException] Uncaught exception sending settings",
+            Logger.red);
+      }
     }
   }
 
+  BluetoothDevice? getDevice() {
+    return _device;
+  }
+
   Future<dynamic> disconnect() async {
+    if (!isConnected) return;
     return await _device?.disconnect();
   }
 }
