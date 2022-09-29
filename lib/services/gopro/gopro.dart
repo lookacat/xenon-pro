@@ -4,6 +4,7 @@ import 'package:xenon/services/gopro/settings.dart';
 
 import '../../logger.dart';
 import '../../store/gopro/settings_store.dart';
+import 'connector.dart';
 import 'constants.dart';
 import 'query.dart';
 
@@ -23,9 +24,13 @@ class GoproService {
 
   Future<void> _initAfterConnect() async {
     isConnected = true;
-    _device!.state.listen((state) {
+
+    var listener;
+    listener = _device!.state.listen((state) async {
       if (state == BluetoothDeviceState.disconnected) {
         isConnected = false;
+        await GoproConnector.startScanning();
+        listener.cancel();
       }
       Logger.log("Device Status changed: ${state}", Logger.green);
     });
