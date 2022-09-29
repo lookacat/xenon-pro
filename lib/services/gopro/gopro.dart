@@ -2,6 +2,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:xenon/services/gopro/settings.dart';
 
 import '../../logger.dart';
+import '../../store/gopro/settings_store.dart';
 import 'constants.dart';
 import 'query.dart';
 
@@ -38,6 +39,10 @@ class GoproService {
       //Logger.log("[GoPro][Query-Response] $value", Logger.cyan);
       QueryResponse response = QueryResponse();
       response.parse(value);
+      for (var setting in response.values.keys) {
+        var value = response.values[setting];
+        SettingsStore.store.setSetting(setting, value);
+      }
     });
   }
 

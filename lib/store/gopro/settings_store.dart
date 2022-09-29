@@ -9,6 +9,11 @@ class SettingsStoreA = SettingsStoreBase with _$SettingsStoreA;
 abstract class SettingsStoreBase with Store {
   @observable
   ObservableMap<Setting, dynamic> state = ObservableMap.of({});
+
+  @action
+  void setSetting(Setting setting, dynamic value) {
+    state[setting] = value;
+  }
 }
 
 class SettingsStore {

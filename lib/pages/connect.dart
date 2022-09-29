@@ -38,7 +38,6 @@ class _ConnectPageState extends State<ConnectPage> {
       });
     });
 
-    // Stop scanning
     flutterBlue.stopScan();
   }
 
@@ -64,7 +63,7 @@ class _ConnectPageState extends State<ConnectPage> {
       if (result.device.name == '') continue;
       var button = TextButton(
         style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
         ),
         onPressed: () => connectToDevice(result.device),
         child: Text(result.device.name),
@@ -78,23 +77,29 @@ class _ConnectPageState extends State<ConnectPage> {
   Widget build(BuildContext context) {
     return Material(
       child: Container(
-        padding: EdgeInsets.only(top: 100),
-        child: Center(
-          child: Column(
-            children: [
-              listDevices(),
-              TextButton(
-                style: ButtonStyle(
-                  foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blue),
-                ),
-                onPressed: refreshDevices,
-                child: const Text(
-                  'Refresh devices',
-                  style: TextStyle(color: Colors.red),
-                ),
+        decoration: const BoxDecoration(color: Color(0xff1F2123)),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Container(
+            padding: EdgeInsets.only(top: 100),
+            child: Center(
+              child: Column(
+                children: [
+                  listDevices(),
+                  TextButton(
+                    style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.blue),
+                    ),
+                    onPressed: refreshDevices,
+                    child: const Text(
+                      'Refresh devices',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

@@ -25,6 +25,20 @@ mixin _$SettingsStoreA on SettingsStoreBase, Store {
     });
   }
 
+  late final _$SettingsStoreBaseActionController =
+      ActionController(name: 'SettingsStoreBase', context: context);
+
+  @override
+  void setSetting(Setting setting, dynamic value) {
+    final _$actionInfo = _$SettingsStoreBaseActionController.startAction(
+        name: 'SettingsStoreBase.setSetting');
+    try {
+      return super.setSetting(setting, value);
+    } finally {
+      _$SettingsStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
