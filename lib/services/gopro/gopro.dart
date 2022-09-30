@@ -50,6 +50,7 @@ class GoproService {
     var queryResponse = _getCharacteristics(Constants.QueryResponseServiceId)!;
     await queryResponse.setNotifyValue(true);
     queryResponse.value.listen((value) {
+      Logger.log("[GoPro][Query-Response] $value", Logger.yellow);
       QueryResponse response = QueryResponse();
       response.parse(value);
       for (var setting in response.values.keys) {
@@ -91,6 +92,22 @@ class GoproService {
     if (characteristic != null) {
       try {
         await characteristic.write(query.toQuery());
+      } on PlatformException catch (exception) {
+        Logger.log(
+            "[GoPro][Service] ${exception.code} Device not connected trying to send query! ${exception.details}",
+            Logger.red);
+      } catch (exception) {
+        Logger.log(
+            "[GoPro][Service] Uncaught exception sending query", Logger.red);
+      }
+    }
+  }
+
+  Future<void> sendQueryRaw(List<int> query) async {
+    var characteristic = _getCharacteristics(Constants.QueryRequestServiceId);
+    if (characteristic != null) {
+      try {
+        await characteristic.write(query);
       } on PlatformException catch (exception) {
         Logger.log(
             "[GoPro][Service] ${exception.code} Device not connected trying to send query! ${exception.details}",

@@ -6,7 +6,7 @@ import '../models/navigation_bar_item.dart';
 import '../store/navigator/navigator_store.dart';
 
 class NavigationBarItem extends StatefulWidget {
-  final ModelNavigationBarItem model;
+  final NavigationBarItemModel model;
   const NavigationBarItem({
     Key? key,
     required this.model,

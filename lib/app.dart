@@ -1,5 +1,4 @@
 import 'package:localstorage/localstorage.dart';
-import 'package:toast/toast.dart';
 
 import '../navigator/navigator.dart';
 import './navigator/navigation_bar.dart';

@@ -48,23 +48,23 @@ class _NavigationBarState extends State<MainNavigationBar> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         NavigationBarItem(
-          model: ModelNavigationBarItem(
+          model: NavigationBarItemModel(
             title: "Connect",
             target: "/connect",
             icon: Ionicons.home,
           ),
         ),
         NavigationBarItem(
-          model: ModelNavigationBarItem(
+          model: NavigationBarItemModel(
             title: "Experimental",
             target: "/experimental",
             icon: Ionicons.images_outline,
           ),
         ),
         NavigationBarItem(
-          model: ModelNavigationBarItem(
-            title: "File",
-            target: "/file",
+          model: NavigationBarItemModel(
+            title: "Presets",
+            target: "/presets",
             icon: Ionicons.folder_outline,
           ),
         ),

@@ -10,8 +10,10 @@ class ConnectionStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 21,
+    return AnimatedContainer(
+      height: connected ? 0 : 21,
+      duration: const Duration(milliseconds: 1000),
+      curve: Curves.fastOutSlowIn,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         color: connected ? Colors.green : Colors.red,

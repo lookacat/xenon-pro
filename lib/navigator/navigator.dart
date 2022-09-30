@@ -5,6 +5,7 @@ import 'package:page_transition/page_transition.dart';
 
 import '../pages/connect.dart';
 import '../pages/experimental.dart';
+import '../pages/presets.dart';
 
 final GlobalKey<NavigatorState> navigationKey = GlobalKey<NavigatorState>();
 
@@ -33,6 +34,11 @@ class PageNavigator extends StatelessWidget {
                 return PageTransition(
                     type: PageTransitionType.fade,
                     child: const ExperimentalPage(),
+                    duration: const Duration(milliseconds: 200));
+              case '/presets':
+                return PageTransition(
+                    type: PageTransitionType.fade,
+                    child: const PresetsPage(),
                     duration: const Duration(milliseconds: 200));
               default:
                 return PageTransition(
