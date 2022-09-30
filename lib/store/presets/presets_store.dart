@@ -47,8 +47,11 @@ abstract class _PresetModel with Store {
   @observable
   bool active = false;
 
+  @observable
+  String? gradient;
+
   _PresetModel();
-  _PresetModel.create(this.title, this.index) {
+  _PresetModel.create(this.title, this.index, this.gradient) {
     id = Guid.newGuid.toString();
   }
 

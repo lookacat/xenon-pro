@@ -130,6 +130,22 @@ mixin _$PresetModel on _PresetModel, Store {
     });
   }
 
+  late final _$gradientAtom =
+      Atom(name: '_PresetModel.gradient', context: context);
+
+  @override
+  String? get gradient {
+    _$gradientAtom.reportRead();
+    return super.gradient;
+  }
+
+  @override
+  set gradient(String? value) {
+    _$gradientAtom.reportWrite(value, super.gradient, () {
+      super.gradient = value;
+    });
+  }
+
   late final _$_PresetModelActionController =
       ActionController(name: '_PresetModel', context: context);
 
@@ -150,7 +166,8 @@ mixin _$PresetModel on _PresetModel, Store {
 id: ${id},
 title: ${title},
 index: ${index},
-active: ${active}
+active: ${active},
+gradient: ${gradient}
     ''';
   }
 }

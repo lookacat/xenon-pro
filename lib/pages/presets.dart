@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../components/presets/preset_list.dart';
+import '../components/presets/preset_list_card.dart';
 import '../store/presets/presets_store.dart';
 
 class PresetsPage extends StatefulWidget {
@@ -33,7 +34,10 @@ class _PresetsPageState extends State<PresetsPage> {
   }
 
   void addNewPreset() {
-    PresetsStore.store.addPreset(PresetModel.create("Nighttime", 0));
+    for (var i = 0; i < 50; i++) {
+      PresetsStore.store.addPreset(PresetModel.create(
+          'My preset $i', i, PresetCardGradient.getPreferedRandomGradient()));
+    }
   }
 
   @override
