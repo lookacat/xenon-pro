@@ -40,6 +40,17 @@ mixin _$PresetsStoreA on PresetsStoreBase, Store {
   }
 
   @override
+  void setActivePreset(String id) {
+    final _$actionInfo = _$PresetsStoreBaseActionController.startAction(
+        name: 'PresetsStoreBase.setActivePreset');
+    try {
+      return super.setActivePreset(id);
+    } finally {
+      _$PresetsStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void load(List<PresetModel> preset) {
     final _$actionInfo = _$PresetsStoreBaseActionController.startAction(
         name: 'PresetsStoreBase.load');
@@ -54,6 +65,92 @@ mixin _$PresetsStoreA on PresetsStoreBase, Store {
   String toString() {
     return '''
 presets: ${presets}
+    ''';
+  }
+}
+
+mixin _$PresetModel on _PresetModel, Store {
+  late final _$idAtom = Atom(name: '_PresetModel.id', context: context);
+
+  @override
+  String? get id {
+    _$idAtom.reportRead();
+    return super.id;
+  }
+
+  @override
+  set id(String? value) {
+    _$idAtom.reportWrite(value, super.id, () {
+      super.id = value;
+    });
+  }
+
+  late final _$titleAtom = Atom(name: '_PresetModel.title', context: context);
+
+  @override
+  String? get title {
+    _$titleAtom.reportRead();
+    return super.title;
+  }
+
+  @override
+  set title(String? value) {
+    _$titleAtom.reportWrite(value, super.title, () {
+      super.title = value;
+    });
+  }
+
+  late final _$indexAtom = Atom(name: '_PresetModel.index', context: context);
+
+  @override
+  int? get index {
+    _$indexAtom.reportRead();
+    return super.index;
+  }
+
+  @override
+  set index(int? value) {
+    _$indexAtom.reportWrite(value, super.index, () {
+      super.index = value;
+    });
+  }
+
+  late final _$activeAtom = Atom(name: '_PresetModel.active', context: context);
+
+  @override
+  bool get active {
+    _$activeAtom.reportRead();
+    return super.active;
+  }
+
+  @override
+  set active(bool value) {
+    _$activeAtom.reportWrite(value, super.active, () {
+      super.active = value;
+    });
+  }
+
+  late final _$_PresetModelActionController =
+      ActionController(name: '_PresetModel', context: context);
+
+  @override
+  void activate() {
+    final _$actionInfo = _$_PresetModelActionController.startAction(
+        name: '_PresetModel.activate');
+    try {
+      return super.activate();
+    } finally {
+      _$_PresetModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  String toString() {
+    return '''
+id: ${id},
+title: ${title},
+index: ${index},
+active: ${active}
     ''';
   }
 }

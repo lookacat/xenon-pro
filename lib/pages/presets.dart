@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import '../models/preset.dart';
-import '../services/gopro/connector.dart';
-import '../store/gopro/connector_store.dart';
+import '../components/presets/preset_list.dart';
 import '../store/presets/presets_store.dart';
 
 class PresetsPage extends StatefulWidget {
@@ -19,6 +16,7 @@ class _PresetsPageState extends State<PresetsPage> {
   Widget listDevices() {
     return Observer(
       builder: (_) => ListView.builder(
+        shrinkWrap: true,
         itemCount: PresetsStore.store.presets.length,
         itemBuilder: (context, index) {
           var item = PresetsStore.store.presets[index];
@@ -27,7 +25,7 @@ class _PresetsPageState extends State<PresetsPage> {
               foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
             ),
             onPressed: () => {},
-            child: Observer(builder: (_) => Text(item.title!)),
+            child: Text(item.title!),
           );
         },
       ),
@@ -35,24 +33,24 @@ class _PresetsPageState extends State<PresetsPage> {
   }
 
   void addNewPreset() {
-    PresetsStore.store.addPreset(PresetModel.create("New Preset", 0));
+    PresetsStore.store.addPreset(PresetModel.create("Nighttime", 0));
   }
 
   @override
   Widget build(BuildContext context) {
     return Material(
       child: Container(
+        padding: const EdgeInsets.only(top: 100),
         decoration: const BoxDecoration(color: Color(0xff1F2123)),
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Container(
             height: 1600,
             width: 100,
-            padding: const EdgeInsets.only(top: 100),
             child: Column(
-              children: [
-                Expanded(
-                  child: listDevices(),
+              children: <Widget>[
+                PresetList(
+                  presets: PresetsStore.store.presets,
                 ),
                 TextButton(
                   style: ButtonStyle(
@@ -60,8 +58,8 @@ class _PresetsPageState extends State<PresetsPage> {
                         MaterialStateProperty.all<Color>(Colors.white),
                   ),
                   onPressed: addNewPreset,
-                  child: Observer(builder: (_) => const Text("Add preset")),
-                )
+                  child: const Text("Add preset"),
+                ),
               ],
             ),
           ),
