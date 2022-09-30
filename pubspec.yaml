@@ -19,6 +19,7 @@ dependencies:
   ionicons: ^0.1.2
   localstorage: ^4.0.0+1
   flutter_guid: ^0.2.0
+  fluttericon: ^2.0.0
 
 dev_dependencies:
   flutter_test:

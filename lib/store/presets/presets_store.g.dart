@@ -146,6 +146,22 @@ mixin _$PresetModel on _PresetModel, Store {
     });
   }
 
+  late final _$settingsAtom =
+      Atom(name: '_PresetModel.settings', context: context);
+
+  @override
+  ObservableMap<Setting, dynamic> get settings {
+    _$settingsAtom.reportRead();
+    return super.settings;
+  }
+
+  @override
+  set settings(ObservableMap<Setting, dynamic> value) {
+    _$settingsAtom.reportWrite(value, super.settings, () {
+      super.settings = value;
+    });
+  }
+
   late final _$_PresetModelActionController =
       ActionController(name: '_PresetModel', context: context);
 
@@ -161,13 +177,36 @@ mixin _$PresetModel on _PresetModel, Store {
   }
 
   @override
+  void setSetting(Setting setting, dynamic value) {
+    final _$actionInfo = _$_PresetModelActionController.startAction(
+        name: '_PresetModel.setSetting');
+    try {
+      return super.setSetting(setting, value);
+    } finally {
+      _$_PresetModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void applySettings() {
+    final _$actionInfo = _$_PresetModelActionController.startAction(
+        name: '_PresetModel.applySettings');
+    try {
+      return super.applySettings();
+    } finally {
+      _$_PresetModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 id: ${id},
 title: ${title},
 index: ${index},
 active: ${active},
-gradient: ${gradient}
+gradient: ${gradient},
+settings: ${settings}
     ''';
   }
 }

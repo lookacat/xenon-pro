@@ -3,7 +3,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:fluttericon/entypo_icons.dart';
+import 'package:fluttericon/fontelico_icons.dart';
+import 'package:ionicons/ionicons.dart';
 
+import '../../services/gopro/constants.dart';
+import '../../services/gopro/settings.dart';
 import '../../store/presets/presets_store.dart';
 
 class PresetListCard extends StatelessWidget {
@@ -16,33 +21,44 @@ class PresetListCard extends StatelessWidget {
 
   void onPresetTap() {
     HapticFeedback.heavyImpact();
+    preset.settings[Setting.Resolution] = Resolution.r_27K_169;
+    preset.settings[Setting.FPS] = FPS.fps_120;
     preset.activate();
   }
 
-  BoxDecoration getCardDecoration() {
+  LinearGradient getCardGradient() {
     Gradient presetGradient = PresetCardGradient.gradients[preset.gradient!]!;
     Color gr1 = presetGradient.start;
     Color gr2 = presetGradient.end;
+    return LinearGradient(
+      begin: Alignment.topRight,
+      end: Alignment.bottomLeft,
+      colors: preset.active
+          ? [
+              Color.fromARGB(255, gr1.red, gr1.green, gr1.blue),
+              Color.fromARGB(255, gr2.red, gr2.green, gr2.blue),
+            ]
+          : [
+              Color.fromARGB(100, gr1.red, gr1.green, gr1.blue),
+              Color.fromARGB(100, gr2.red, gr2.green, gr2.blue),
+            ],
+    );
+  }
+
+  BoxDecoration getCardDecoration() {
     return BoxDecoration(
       border: preset.active
-          ? Border.all(color: Color.fromARGB(160, 255, 255, 255), width: 2.5)
+          ? Border.all(
+              color: const Color.fromARGB(160, 255, 255, 255),
+              width: 2.5,
+            )
           : Border.all(width: 0),
-      gradient: LinearGradient(
-        begin: Alignment.topRight,
-        end: Alignment.bottomLeft,
-        colors: preset.active
-            ? [
-                Color.fromARGB(255, gr1.red, gr1.green, gr1.blue),
-                Color.fromARGB(255, gr2.red, gr2.green, gr2.blue),
-              ]
-            : [
-                Color.fromARGB(100, gr1.red, gr1.green, gr1.blue),
-                Color.fromARGB(100, gr2.red, gr2.green, gr2.blue),
-              ],
-      ),
+      gradient: getCardGradient(),
       borderRadius: const BorderRadius.all(Radius.circular(8)),
     );
   }
+
+  void onPresetEditTap() {}
 
   @override
   Widget build(BuildContext context) {
@@ -54,16 +70,38 @@ class PresetListCard extends StatelessWidget {
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
           margin: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
-          padding: const EdgeInsets.all(20),
-          child: Observer(
-            builder: (_) => Text(
-              preset.title!,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
+          padding: const EdgeInsets.only(left: 20, right: 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Observer(
+                builder: (_) => Text(
+                  preset.title!,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
-            ),
+              GestureDetector(
+                onTap: onPresetEditTap,
+                child: Container(
+                  height: 50,
+                  width: 50,
+                  margin: EdgeInsets.all(10),
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(100, 0, 0, 0),
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  child: const Icon(
+                    Entypo.pencil,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                ),
+              )
+            ],
           ),
         ),
       ),
@@ -83,7 +121,7 @@ class Gradient {
 
 class PresetCardGradient {
   static final Map<String, Gradient> gradients = {
-    'red1': const Gradient(
+    'default': const Gradient(
       start: Color.fromARGB(255, 240, 106, 22),
       end: Color.fromARGB(255, 249, 35, 35),
     ),
@@ -126,8 +164,9 @@ class PresetCardGradient {
     var availableGradients = gradients.keys
         .where((element) => !usedGradients.contains(element))
         .toList();
-    if (availableGradients.isEmpty)
+    if (availableGradients.isEmpty) {
       availableGradients = gradients.keys.toList();
+    }
     final random = Random();
     final index = random.nextInt(availableGradients.length);
     return availableGradients.elementAt(index);

@@ -2,8 +2,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
+import '../components/presets/preset_list_card.dart';
 import '../models/navigation_bar_item.dart';
 import '../store/navigator/navigator_store.dart';
+import '../store/presets/presets_store.dart';
 
 class NavigationBarItem extends StatefulWidget {
   final NavigationBarItemModel model;
@@ -35,7 +37,7 @@ class _NavigationBarItemState extends State<NavigationBarItem> {
       child: Icon(
         widget.model.icon,
         color: widget.model.target == NavigatorStore.store.route
-            ? Color.fromARGB(255, 248, 185, 185)
+            ? Colors.white
             : Color(0xff696969),
         size: 25,
       ),
@@ -67,25 +69,40 @@ class _NavigationBarItemState extends State<NavigationBarItem> {
           builder: (_) => Column(
             children: <Widget>[
               buildIcon(),
-              Container(
+              AnimatedContainer(
                 margin: const EdgeInsets.symmetric(
                   vertical: 10,
                 ),
+                duration: const Duration(milliseconds: 150),
+                curve: Curves.fastOutSlowIn,
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
                 decoration: widget.model.target == NavigatorStore.store.route
-                    ? const BoxDecoration(
+                    ? BoxDecoration(
                         color: Colors.blue,
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         gradient: LinearGradient(
                           begin: Alignment.topRight,
                           end: Alignment.bottomLeft,
                           colors: [
-                            Color.fromARGB(255, 240, 106, 22),
-                            Color.fromARGB(255, 249, 35, 35),
+                            PresetsStore.store.activeGradientOrDefault.start
+                                .withAlpha(200),
+                            PresetsStore.store.activeGradientOrDefault.end
+                                .withAlpha(200),
                           ],
                         ),
                       )
-                    : const BoxDecoration(),
+                    : const BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        gradient: LinearGradient(
+                          begin: Alignment.topRight,
+                          end: Alignment.bottomLeft,
+                          colors: [
+                            Color(0xff1F2123),
+                            Color(0xff1F2123),
+                          ],
+                        ),
+                      ),
                 child: buildLabel(),
               ),
             ],

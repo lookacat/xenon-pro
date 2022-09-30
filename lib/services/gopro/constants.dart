@@ -54,6 +54,56 @@ class Constants {
     28: Resolution.r_4K_87,
     100: Resolution.r_53K_169,
   };
+  static const ResolutionValuesMeta = {
+    Resolution.r_4K_169: {
+      'text': '4K 16:9',
+      'short': '4K',
+    },
+    Resolution.r_27K_169: {
+      'text': '2.7K 16:9',
+      'short': '2.7K',
+    },
+    Resolution.r_27K_43: {
+      'text': '2.7K 4:3',
+      'short': '2.7K',
+    },
+    Resolution.r_1440_169: {
+      'text': '1440p 16:9',
+      'short': '2K',
+    },
+    Resolution.r_1080_169: {
+      'text': '1080p 16:9',
+      'short': 'Full HD',
+    },
+    Resolution.r_4K_43: {
+      'text': '4K 4:3',
+      'short': '4K',
+    },
+    Resolution.r_5K_169: {
+      'text': '5K 16:9',
+      'short': '5K',
+    },
+    Resolution.r_5K_43: {
+      'text': '5K 4:3',
+      'short': '5K',
+    },
+    Resolution.r_53K_87: {
+      'text': '5K 8:7',
+      'short': '5K',
+    },
+    Resolution.r_53K_43: {
+      'text': '5K 4:3',
+      'short': '5K',
+    },
+    Resolution.r_4K_87: {
+      'text': '4K 8:7',
+      'short': '4K',
+    },
+    Resolution.r_53K_169: {
+      'text': '5.3K 16:9',
+      'short': '5.3K',
+    }
+  };
   static const FPSValues = {
     0: FPS.fps_240,
     1: FPS.fps_120,
@@ -64,6 +114,17 @@ class Constants {
     9: FPS.fps_25,
     10: FPS.fps_24,
     13: FPS.fps_200,
+  };
+  static const FPSValuesMeta = {
+    FPS.fps_240: {'text': '240', 'short': '240'},
+    FPS.fps_120: {'text': '120', 'short': '120'},
+    FPS.fps_100: {'text': '100', 'short': '100'},
+    FPS.fps_60: {'text': '60', 'short': '60'},
+    FPS.fps_50: {'text': '50', 'short': '50'},
+    FPS.fps_30: {'text': '30', 'short': '30'},
+    FPS.fps_25: {'text': '25', 'short': '25'},
+    FPS.fps_24: {'text': '24', 'short': '24'},
+    FPS.fps_200: {'text': '200', 'short': '200'},
   };
   static const Map<int, dynamic> SettingsMap = {
     2: {'type': Setting.Resolution, 'values': ResolutionValues},
