@@ -16,14 +16,10 @@ abstract class NavigatorStoreBase with Store {
   Map<String, dynamic>? routeParameters;
 
   @action
-  void changeRoute(String value, {Map<String, dynamic>? parameters}) {
-    navigationKey.currentState!.pushReplacementNamed(value);
+  void changeRoute(String value, {dynamic parameters}) {
+    navigationKey.currentState!
+        .pushReplacementNamed(value, arguments: parameters);
     route = value;
-    if (parameters != null) {
-      routeParameters = parameters;
-    } else {
-      routeParameters = <String, dynamic>{};
-    }
     log("Navigated to route: $route");
   }
 

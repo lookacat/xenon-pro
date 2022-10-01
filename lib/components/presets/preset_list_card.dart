@@ -9,6 +9,7 @@ import 'package:ionicons/ionicons.dart';
 
 import '../../services/gopro/constants.dart';
 import '../../services/gopro/settings.dart';
+import '../../store/navigator/navigator_store.dart';
 import '../../store/presets/presets_store.dart';
 
 class PresetListCard extends StatelessWidget {
@@ -39,8 +40,8 @@ class PresetListCard extends StatelessWidget {
               Color.fromARGB(255, gr2.red, gr2.green, gr2.blue),
             ]
           : [
-              Color.fromARGB(100, gr1.red, gr1.green, gr1.blue),
-              Color.fromARGB(100, gr2.red, gr2.green, gr2.blue),
+              Color.fromARGB(120, gr1.red, gr1.green, gr1.blue),
+              Color.fromARGB(120, gr2.red, gr2.green, gr2.blue),
             ],
     );
   }
@@ -58,7 +59,10 @@ class PresetListCard extends StatelessWidget {
     );
   }
 
-  void onPresetEditTap() {}
+  void onPresetEditTap() {
+    HapticFeedback.heavyImpact();
+    NavigatorStore.store.changeRoute('/edit', parameters: preset);
+  }
 
   @override
   Widget build(BuildContext context) {

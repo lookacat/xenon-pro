@@ -5,6 +5,7 @@ import 'package:flutter_guid/flutter_guid.dart';
 import 'package:collection/collection.dart';
 
 import '../../components/presets/preset_list_card.dart';
+import '../../logger.dart';
 import '../../services/gopro/settings.dart';
 import '../services_store.dart';
 part 'presets_store.g.dart';
@@ -92,7 +93,11 @@ abstract class _PresetModel with Store {
     for (var setting in settings.keys) {
       var value = settings[setting];
       var request = SettingsRequest(setting, value);
-      ServicesStore.store.goproService!.sendSettings(request);
+      try {
+        ServicesStore.store.goproService!.sendSettings(request);
+      } catch (e) {
+        Logger.log("Error applying preset settings: $e", Logger.red);
+      }
     }
   }
 }

@@ -45,7 +45,7 @@ mixin _$NavigatorStoreA on NavigatorStoreBase, Store {
       ActionController(name: 'NavigatorStoreBase', context: context);
 
   @override
-  void changeRoute(String value, {Map<String, dynamic>? parameters}) {
+  void changeRoute(String value, {dynamic parameters}) {
     final _$actionInfo = _$NavigatorStoreBaseActionController.startAction(
         name: 'NavigatorStoreBase.changeRoute');
     try {
